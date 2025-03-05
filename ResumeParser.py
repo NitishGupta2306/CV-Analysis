@@ -4,6 +4,7 @@ import docx
 from pdf2image import convert_from_path
 import re
 import json
+import os
 
 # Clean up the text by removing unwanted spaces and newlines
 def clean_text(text):
@@ -13,8 +14,6 @@ def clean_text(text):
     # Replace multiple spaces with a single space
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     
-    print(cleaned_text)
-
     return cleaned_text
 
 # Function to extract text from PDF
@@ -115,16 +114,17 @@ def process_resume(file_path):
     else:
         raise ValueError("Only PDF and DOCX files are supported")
     
-    sections = extract_sections(text)
+    #sections = extract_sections(text)
     
     # Save the extracted data into a JSON file
     json_file_path = file_path.split('.')[0] + '_extracted_data.json'
     with open(json_file_path, 'w') as json_file:
-        json.dump(sections, json_file, indent=4)
+        json.dump(text, json_file, indent=4)
 
     return json_file_path  # Return the path to the saved JSON file
 
-# Example usage
-file_path = "CVs/File (2).pdf"  # Change to the file path of your resume
-json_output_path = process_resume(file_path)
-print(f"Extracted data saved to {json_output_path}")
+# Processing all files
+for files in os.listdir("CVs"):
+    if files.endswith(".pdf") or files.endswith(".docx"):
+        json_output_path = process_resume(f"CVs/{files}")
+        print(f"Processed {files} and saved extracted data to {json_output_path}")
