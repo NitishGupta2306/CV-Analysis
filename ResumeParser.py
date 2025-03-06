@@ -9,7 +9,7 @@ import os
 import openai
 
 # Set your OpenAI API key here
-openai.api_key = "input your key"
+openai.api_key = ""
 
 # Data to store extracted text
 data = []
